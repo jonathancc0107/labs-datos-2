@@ -20,6 +20,17 @@ public class Metodos {
         g.dispose();
         
     }
+    
+        public static void dibujarIcono(BufferedImage icono, int x, int y, JPanel panel, String nomper) {
+        x = x-(icono.getWidth()/2);
+        y = y - (icono.getHeight()/2);
+        Graphics g = panel.getGraphics();
+        g.drawImage(icono, x, y, icono.getWidth(), icono.getHeight(),panel);
+        g.setColor(Color.red);
+        g.drawString(nomper, x, y);
+        g.dispose();
+        
+    }
     public static void dibujarImagen(BufferedImage icono, int x, int y, JPanel panel) {
         Graphics g = panel.getGraphics();
         g.drawImage(icono, x, y, icono.getWidth(), icono.getHeight(),panel);
@@ -35,7 +46,7 @@ public class Metodos {
     }
     public static void dibujarLinea(int xi, int yi, int xf, int yf, JPanel panel){
         Graphics g = panel.getGraphics();
-        g.setColor(Color.black);
+        g.setColor(Color.white);
         g.drawLine(xi, yi, xf, yf);
         g.dispose();
     } 

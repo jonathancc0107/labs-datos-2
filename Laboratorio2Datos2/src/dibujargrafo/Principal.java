@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,10 +27,13 @@ public class Principal extends javax.swing.JFrame {
     ArrayList<Nodo> lista = new ArrayList();
     ArrayList<String> idiomas;
     BufferedImage iconohombre = Metodos.cargarImagen("icon-man");
-    BufferedImage iconoSeleccionado = Metodos.cargarImagen("icon-girl");
+    BufferedImage iconomujer = Metodos.cargarImagen("icon-girl");
+    BufferedImage hombreSeleccionado = Metodos.cargarImagen("man-selected");
+    BufferedImage mujerSeleccionado = Metodos.cargarImagen("girl-selected");
     Nodo seleccionado = null;
-    String nombre;
     String sexo;
+    public static final String[] sexos = {"Masculino", "Femenino"};
+    boolean entrar = true;
 
     boolean tieneidiomas() {
         return ES.isSelected() || EN.isSelected() || FR.isSelected() || CH.isSelected()
@@ -51,11 +56,6 @@ public class Principal extends javax.swing.JFrame {
     private void initComponents() {
 
         datospersona = new javax.swing.JFrame();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        name = new javax.swing.JTextField();
-        sexos = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         ES = new javax.swing.JCheckBox();
         EN = new javax.swing.JCheckBox();
@@ -63,19 +63,11 @@ public class Principal extends javax.swing.JFrame {
         GER = new javax.swing.JCheckBox();
         CH = new javax.swing.JCheckBox();
         PR = new javax.swing.JCheckBox();
-        Aceptar = new javax.swing.JButton();
+        Acept = new javax.swing.JButton();
         panel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
-        datospersona.setMinimumSize(new java.awt.Dimension(400, 360));
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Ingrese sus datos"));
-
-        jLabel2.setText("Nombre:");
-
-        jLabel3.setText("Sexo:");
-
-        sexos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ingrese su sexo", "Masculino", "Femenino" }));
+        datospersona.setMinimumSize(new java.awt.Dimension(390, 220));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Seleccione los idiomas que habla"));
 
@@ -91,6 +83,13 @@ public class Principal extends javax.swing.JFrame {
 
         PR.setText("Portugués");
 
+        Acept.setText("Aceptar");
+        Acept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AceptActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -98,17 +97,23 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ES)
-                    .addComponent(GER))
-                .addGap(62, 62, 62)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(EN)
-                    .addComponent(CH))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(FR)
-                    .addComponent(PR))
-                .addGap(9, 9, 9))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(ES)
+                        .addGap(62, 62, 62)
+                        .addComponent(EN)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(FR)
+                        .addGap(21, 21, 21))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(Acept)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(GER)
+                                .addGap(62, 62, 62)
+                                .addComponent(CH)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                        .addComponent(PR)
+                        .addContainerGap())))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,59 +123,13 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(ES)
                     .addComponent(EN)
                     .addComponent(FR))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(GER)
                     .addComponent(CH)
                     .addComponent(PR))
-                .addGap(35, 35, 35))
-        );
-
-        Aceptar.setText("Aceptar");
-        Aceptar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AceptarActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(sexos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 39, Short.MAX_VALUE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(137, 137, 137)
-                .addComponent(Aceptar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(sexos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                .addComponent(Aceptar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addComponent(Acept)
                 .addContainerGap())
         );
 
@@ -180,14 +139,14 @@ public class Principal extends javax.swing.JFrame {
             datospersonaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(datospersonaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         datospersonaLayout.setVerticalGroup(
             datospersonaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(datospersonaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -247,27 +206,48 @@ public class Principal extends javax.swing.JFrame {
 
 
     private void panelMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelMouseReleased
-
         int d = 50, r = d / 2;
         int x = evt.getX();
         int y = evt.getY();
         int ancho = panel.getWidth(), alto = panel.getHeight();
-        this.datospersona.setVisible(true);
         if (seleccionado == null) {
             seleccionado = Metodos.seleccionar(x, y, d, lista);
             if (seleccionado != null) {
-                Metodos.dibujarIcono(iconoSeleccionado, seleccionado.getX(), seleccionado.getY(), panel);
+                Metodos.dibujarIcono(hombreSeleccionado, seleccionado.getX(), seleccionado.getY(), panel);
             } else {
-                if (Metodos.sePuedeDibujar(x, y, r, ancho, alto)) {
-                    if (!Metodos.colisiona(x, y, d, lista)) {
-                        int red = (int) (Math.random() * 255);
-                        int green = (int) (Math.random() * 255);
-                        int blue = (int) (Math.random() * 255);
-                        Color c = new Color(red, green, blue);
-                        Metodos.dibujarIcono(iconohombre, x, y, panel);
-                        lista.add(new Nodo(x, y, d, c));
+                String nombre = JOptionPane.showInputDialog("Ingrese su nombre: ");
+                JFrame frame = new JFrame("Sexo de la persona");
+                String sexo = (String) JOptionPane.showInputDialog(frame,
+                        "Por favor seleccione su sexo",
+                        "Seleccione su sexo",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        sexos,
+                        sexos[0]);
+                do {
+                    if (nombre.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Error, no puede dejar la casilla vacía");
+                        nombre = JOptionPane.showInputDialog("Ingrese su nombre: ");
+                        entrar = true;
+                    } else {
+                        if (Metodos.sePuedeDibujar(x, y, r, ancho, alto)) {
+                            if (!Metodos.colisiona(x, y, d, lista)) {
+                                int red = (int) (Math.random() * 255);
+                                int green = (int) (Math.random() * 255);
+                                int blue = (int) (Math.random() * 255);
+                                Color c = new Color(red, green, blue);
+                                if (sexo.equals("Masculino")) {
+                                    Metodos.dibujarIcono(iconohombre, x, y, panel, nombre);
+                                } else {
+                                    Metodos.dibujarIcono(iconomujer, x, y, panel, nombre);
+                                }
+                                lista.add(new Nodo(x, y, d, c));
+                            }
+                        }
+                        entrar = false;
                     }
-                }
+                } while (entrar);
+
             }
         } else {
             Nodo destino = Metodos.seleccionar(x, y, d, lista);
@@ -279,6 +259,8 @@ public class Principal extends javax.swing.JFrame {
             Metodos.dibujarIcono(iconohombre, seleccionado.getX(), seleccionado.getY(), panel);
             seleccionado = null;
         }
+
+
     }//GEN-LAST:event_panelMouseReleased
 
     private void panelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_panelComponentShown
@@ -289,43 +271,9 @@ public class Principal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_panelPropertyChange
 
-    private void AceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AceptarActionPerformed
-        nombre = name.getText();
-        sexo = sexos.getSelectedItem().toString();
-        idiomas = new ArrayList();
-        if (!nombre.isEmpty()) {
-            if (!sexo.equals("Ingrese su sexo")) {
-                if (tieneidiomas()) {
-                    if (ES.isSelected()) {
-                        idiomas.add("Español");
-                    }
-                    if (EN.isSelected()) {
-                        idiomas.add("Inglés");
-                    }
-                    if (FR.isSelected()) {
-                        idiomas.add("Francés");
-                    }
-                    if (GER.isSelected()) {
-                        idiomas.add("Alemán");
-                    }
-                    if (CH.isSelected()) {
-                        idiomas.add("Mandarín");
-                    }
-                    if (PR.isSelected()) {
-                        idiomas.add("Portugués");
-                    }
-                    this.datospersona.setVisible(false);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Debe seleccionar al menos un idioma");
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Debe seleccionar su sexo");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Debe colocar su nombre");
-        }
-
-    }//GEN-LAST:event_AceptarActionPerformed
+    private void AceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AceptActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AceptActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -365,7 +313,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Aceptar;
+    private javax.swing.JButton Acept;
     private javax.swing.JCheckBox CH;
     private javax.swing.JCheckBox EN;
     private javax.swing.JCheckBox ES;
@@ -374,12 +322,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JCheckBox PR;
     private javax.swing.JFrame datospersona;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField name;
     private javax.swing.JPanel panel;
-    private javax.swing.JComboBox<String> sexos;
     // End of variables declaration//GEN-END:variables
 }
