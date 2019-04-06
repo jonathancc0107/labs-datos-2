@@ -213,7 +213,11 @@ public class Principal extends javax.swing.JFrame {
         if (seleccionado == null) {
             seleccionado = Metodos.seleccionar(x, y, d, lista);
             if (seleccionado != null) {
-                Metodos.dibujarIcono(hombreSeleccionado, seleccionado.getX(), seleccionado.getY(), panel);
+                if (seleccionado.isIsman()) {
+                    Metodos.dibujarIcono(hombreSeleccionado, seleccionado.getX(), seleccionado.getY(), panel);
+                } else {
+                    Metodos.dibujarIcono(mujerSeleccionado, seleccionado.getX(), seleccionado.getY(), panel);
+                }
             } else {
                 String nombre = JOptionPane.showInputDialog("Ingrese su nombre: ");
                 JFrame frame = new JFrame("Sexo de la persona");
@@ -232,16 +236,13 @@ public class Principal extends javax.swing.JFrame {
                     } else {
                         if (Metodos.sePuedeDibujar(x, y, r, ancho, alto)) {
                             if (!Metodos.colisiona(x, y, d, lista)) {
-                                int red = (int) (Math.random() * 255);
-                                int green = (int) (Math.random() * 255);
-                                int blue = (int) (Math.random() * 255);
-                                Color c = new Color(red, green, blue);
                                 if (sexo.equals("Masculino")) {
                                     Metodos.dibujarIcono(iconohombre, x, y, panel, nombre);
+                                    lista.add(new Nodo(x, y, d, nombre, true));
                                 } else {
                                     Metodos.dibujarIcono(iconomujer, x, y, panel, nombre);
+                                    lista.add(new Nodo(x, y, d, nombre, false));
                                 }
-                                lista.add(new Nodo(x, y, d, c));
                             }
                         }
                         entrar = false;
@@ -253,10 +254,17 @@ public class Principal extends javax.swing.JFrame {
             Nodo destino = Metodos.seleccionar(x, y, d, lista);
             if (destino != null) {
                 Metodos.dibujarLinea(seleccionado.getX(), seleccionado.getY(), destino.getX(), destino.getY(), panel);
-                Metodos.dibujarIcono(iconohombre, destino.getX(), destino.getY(), panel);
+                if (destino.isIsman()) {
+                    Metodos.dibujarIcono(iconohombre, destino.getX(), destino.getY(), panel);
+                } else {
+                    Metodos.dibujarIcono(iconomujer, destino.getX(), destino.getY(), panel);
+                }
             }
-
-            Metodos.dibujarIcono(iconohombre, seleccionado.getX(), seleccionado.getY(), panel);
+            if (seleccionado.isIsman()) {
+                Metodos.dibujarIcono(iconohombre, seleccionado.getX(), seleccionado.getY(), panel);
+            } else {
+                Metodos.dibujarIcono(iconomujer, seleccionado.getX(), seleccionado.getY(), panel);
+            }
             seleccionado = null;
         }
 

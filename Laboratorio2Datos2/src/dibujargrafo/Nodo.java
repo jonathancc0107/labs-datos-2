@@ -7,13 +7,23 @@ public class Nodo {
     private int x;
     private int y;
     private int d;
-    private Color color;
+    private String nombre;
+    private boolean isman;
 
-    public Nodo(int x, int y, int d, Color color) {
+    public Nodo(int x, int y, int d, String nombre, boolean isman) {
         this.x = x;
         this.y = y;
         this.d = d;
-        this.color = color;
+        this.nombre = nombre;
+        this.isman = isman;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public boolean isIsman() {
+        return isman;
     }
 
     public int getX() {
@@ -28,7 +38,5 @@ public class Nodo {
         return d;
     }
 
-    public Color getColor() {
-        return color;
-    }
+
 }

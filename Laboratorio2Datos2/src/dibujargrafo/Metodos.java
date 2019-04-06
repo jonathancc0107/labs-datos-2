@@ -46,7 +46,7 @@ public class Metodos {
     }
     public static void dibujarLinea(int xi, int yi, int xf, int yf, JPanel panel){
         Graphics g = panel.getGraphics();
-        g.setColor(Color.white);
+        g.setColor(Color.BLACK);
         g.drawLine(xi, yi, xf, yf);
         g.dispose();
     } 
