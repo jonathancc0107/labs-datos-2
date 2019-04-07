@@ -25,6 +25,7 @@ public class Principal extends javax.swing.JFrame {
      * Creates new form Principal
      */
     ArrayList<Nodo> lista = new ArrayList();
+    ArrayList<Arista> aristas = new ArrayList<>();
     ArrayList<String> idiomas;
     BufferedImage iconohombre = Metodos.cargarImagen("icon-man");
     BufferedImage iconomujer = Metodos.cargarImagen("icon-girl");
@@ -33,6 +34,8 @@ public class Principal extends javax.swing.JFrame {
     Nodo seleccionado = null;
     String sexo;
     public static final String[] sexos = {"Masculino", "Femenino"};
+    public static final String[] relaciones = {"Amigo" , "Padre", "Madre", "Hermano(a)",
+        "Primo(a)" , "Sobrino(a)" , "Abuelo(a)", "Tío(a)"};
     boolean entrar = true;
 
     boolean tieneidiomas() {
@@ -206,6 +209,7 @@ public class Principal extends javax.swing.JFrame {
 
 
     private void panelMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelMouseReleased
+        JFrame frame = new JFrame("El necesario");
         int d = 50, r = d / 2;
         int x = evt.getX();
         int y = evt.getY();
@@ -214,13 +218,14 @@ public class Principal extends javax.swing.JFrame {
             seleccionado = Metodos.seleccionar(x, y, d, lista);
             if (seleccionado != null) {
                 if (seleccionado.isIsman()) {
-                    Metodos.dibujarIcono(hombreSeleccionado, seleccionado.getX(), seleccionado.getY(), panel);
+                    Metodos.dibujarIcono(hombreSeleccionado, seleccionado.getX(), 
+                            seleccionado.getY(), panel);
                 } else {
-                    Metodos.dibujarIcono(mujerSeleccionado, seleccionado.getX(), seleccionado.getY(), panel);
+                    Metodos.dibujarIcono(mujerSeleccionado, seleccionado.getX(), 
+                            seleccionado.getY(), panel);
                 }
             } else {
                 String nombre = JOptionPane.showInputDialog("Ingrese su nombre: ");
-                JFrame frame = new JFrame("Sexo de la persona");
                 String sexo = (String) JOptionPane.showInputDialog(frame,
                         "Por favor seleccione su sexo",
                         "Seleccione su sexo",
@@ -253,12 +258,21 @@ public class Principal extends javax.swing.JFrame {
         } else {
             Nodo destino = Metodos.seleccionar(x, y, d, lista);
             if (destino != null) {
-                Metodos.dibujarLinea(seleccionado.getX(), seleccionado.getY(), destino.getX(), destino.getY(), panel);
+                String relacion = (String) JOptionPane.showInputDialog(frame,
+                        "¿Qué relación tiene con la persona "+destino.getNombre(),
+                        "Relaciones",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        relaciones,
+                        relaciones[0]);
+                Metodos.dibujarLinea(seleccionado.getX(), seleccionado.getY(), 
+                        destino.getX(), destino.getY(), panel);
                 if (destino.isIsman()) {
                     Metodos.dibujarIcono(iconohombre, destino.getX(), destino.getY(), panel);
                 } else {
                     Metodos.dibujarIcono(iconomujer, destino.getX(), destino.getY(), panel);
                 }
+                aristas.add(new Arista(seleccionado.getNombre(), destino.getNombre(), relacion));
             }
             if (seleccionado.isIsman()) {
                 Metodos.dibujarIcono(iconohombre, seleccionado.getX(), seleccionado.getY(), panel);
@@ -267,8 +281,6 @@ public class Principal extends javax.swing.JFrame {
             }
             seleccionado = null;
         }
-
-
     }//GEN-LAST:event_panelMouseReleased
 
     private void panelComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_panelComponentShown
