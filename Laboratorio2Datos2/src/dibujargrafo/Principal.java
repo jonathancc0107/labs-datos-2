@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -26,7 +27,12 @@ public class Principal extends javax.swing.JFrame {
      */
     ArrayList<Nodo> lista = new ArrayList();
     ArrayList<Arista> aristas = new ArrayList<>();
-    ArrayList<String> idiomas;
+    ArrayList<String> esp = new ArrayList<>();
+    ArrayList<String> eng = new ArrayList<>();
+    ArrayList<String> fr = new ArrayList<>();
+    ArrayList<String> port = new ArrayList<>();
+    ArrayList<String> ger = new ArrayList<>();
+    ArrayList<String> chn = new ArrayList<>();
     BufferedImage iconohombre = Metodos.cargarImagen("icon-man");
     BufferedImage iconomujer = Metodos.cargarImagen("icon-girl");
     BufferedImage hombreSeleccionado = Metodos.cargarImagen("man-selected");
@@ -34,19 +40,56 @@ public class Principal extends javax.swing.JFrame {
     Nodo seleccionado = null;
     String sexo;
     public static final String[] sexos = {"Masculino", "Femenino"};
-    public static final String[] relaciones = {"Amigo" , "Padre", "Madre", "Hermano(a)",
-        "Primo(a)" , "Sobrino(a)" , "Abuelo(a)", "Tío(a)"};
+    public static final String[] relaciones = {"Amigo", "Padre", "Madre", "Hermano(a)",
+        "Primo(a)", "Sobrino(a)", "Abuelo(a)", "Tío(a)"};
     boolean entrar = true;
 
+    /*
     boolean tieneidiomas() {
         return ES.isSelected() || EN.isSelected() || FR.isSelected() || CH.isSelected()
                 || GER.isSelected() || PR.isSelected();
+    }
+    
+     */
+    void mostraridiomas(String name) {
+        JCheckBox ES = new JCheckBox("Español");
+        JCheckBox EN = new JCheckBox("Inglés");
+        JCheckBox FR = new JCheckBox("Francés");
+        JCheckBox GER = new JCheckBox("Alemán");
+        JCheckBox PR = new JCheckBox("Portugués");
+        JCheckBox CH = new JCheckBox("Mandarín");
+        String message = "Seleccione los idiomas que habla ";
+        Object[] params = {message, ES, EN, FR, GER, PR, CH};
+        int n = JOptionPane.showConfirmDialog(null, params, "Idiomas", JOptionPane.YES_OPTION);
+        boolean entra;
+        do {
+            if (ES.isSelected() || EN.isSelected() || FR.isSelected() || CH.isSelected()
+                    || GER.isSelected() || PR.isSelected()) {
+                if (ES.isSelected()) 
+                    esp.add(name);
+                if (EN.isSelected()) 
+                    eng.add(name);
+                if (FR.isSelected()) 
+                    fr.add(name);
+                if (CH.isSelected()) 
+                    chn.add(name);
+                if (GER.isSelected()) 
+                    ger.add(name);
+                if (PR.isSelected()) 
+                    port.add(name);
+                entra = false;
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe ingresar al menos un idioma");
+                n = JOptionPane.showConfirmDialog(null, params, "Idiomas", JOptionPane.YES_OPTION);
+                entra = true;
+            }
+        } while (entra);
+        System.out.println(" "+esp);
     }
 
     public Principal() throws IOException {
         initComponents();
         this.setLocationRelativeTo(null);
-        this.datospersona.setLocationRelativeTo(null);
     }
 
     /**
@@ -58,100 +101,8 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        datospersona = new javax.swing.JFrame();
-        jPanel2 = new javax.swing.JPanel();
-        ES = new javax.swing.JCheckBox();
-        EN = new javax.swing.JCheckBox();
-        FR = new javax.swing.JCheckBox();
-        GER = new javax.swing.JCheckBox();
-        CH = new javax.swing.JCheckBox();
-        PR = new javax.swing.JCheckBox();
-        Acept = new javax.swing.JButton();
         panel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-
-        datospersona.setMinimumSize(new java.awt.Dimension(390, 220));
-
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Seleccione los idiomas que habla"));
-
-        ES.setText("Español");
-
-        EN.setText("Inglés");
-
-        FR.setText("Francés");
-
-        GER.setText("Alemán");
-
-        CH.setText("Mandarín");
-
-        PR.setText("Portugués");
-
-        Acept.setText("Aceptar");
-        Acept.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AceptActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(ES)
-                        .addGap(62, 62, 62)
-                        .addComponent(EN)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(FR)
-                        .addGap(21, 21, 21))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(Acept)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(GER)
-                                .addGap(62, 62, 62)
-                                .addComponent(CH)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
-                        .addComponent(PR)
-                        .addContainerGap())))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ES)
-                    .addComponent(EN)
-                    .addComponent(FR))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(GER)
-                    .addComponent(CH)
-                    .addComponent(PR))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-                .addComponent(Acept)
-                .addContainerGap())
-        );
-
-        javax.swing.GroupLayout datospersonaLayout = new javax.swing.GroupLayout(datospersona.getContentPane());
-        datospersona.getContentPane().setLayout(datospersonaLayout);
-        datospersonaLayout.setHorizontalGroup(
-            datospersonaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(datospersonaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        datospersonaLayout.setVerticalGroup(
-            datospersonaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(datospersonaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBounds(new java.awt.Rectangle(0, 0, 1024, 768));
@@ -218,10 +169,10 @@ public class Principal extends javax.swing.JFrame {
             seleccionado = Metodos.seleccionar(x, y, d, lista);
             if (seleccionado != null) {
                 if (seleccionado.isIsman()) {
-                    Metodos.dibujarIcono(hombreSeleccionado, seleccionado.getX(), 
+                    Metodos.dibujarIcono(hombreSeleccionado, seleccionado.getX(),
                             seleccionado.getY(), panel);
                 } else {
-                    Metodos.dibujarIcono(mujerSeleccionado, seleccionado.getX(), 
+                    Metodos.dibujarIcono(mujerSeleccionado, seleccionado.getX(),
                             seleccionado.getY(), panel);
                 }
             } else {
@@ -239,6 +190,7 @@ public class Principal extends javax.swing.JFrame {
                         nombre = JOptionPane.showInputDialog("Ingrese su nombre: ");
                         entrar = true;
                     } else {
+                        mostraridiomas(nombre);
                         if (Metodos.sePuedeDibujar(x, y, r, ancho, alto)) {
                             if (!Metodos.colisiona(x, y, d, lista)) {
                                 if (sexo.equals("Masculino")) {
@@ -259,13 +211,13 @@ public class Principal extends javax.swing.JFrame {
             Nodo destino = Metodos.seleccionar(x, y, d, lista);
             if (destino != null) {
                 String relacion = (String) JOptionPane.showInputDialog(frame,
-                        "¿Qué relación tiene con la persona "+destino.getNombre(),
+                        "¿Qué relación tiene con la persona " + destino.getNombre(),
                         "Relaciones",
                         JOptionPane.QUESTION_MESSAGE,
                         null,
                         relaciones,
                         relaciones[0]);
-                Metodos.dibujarLinea(seleccionado.getX(), seleccionado.getY(), 
+                Metodos.dibujarLinea(seleccionado.getX(), seleccionado.getY(),
                         destino.getX(), destino.getY(), panel);
                 if (destino.isIsman()) {
                     Metodos.dibujarIcono(iconohombre, destino.getX(), destino.getY(), panel);
@@ -290,10 +242,6 @@ public class Principal extends javax.swing.JFrame {
     private void panelPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_panelPropertyChange
 
     }//GEN-LAST:event_panelPropertyChange
-
-    private void AceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AceptActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_AceptActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -333,16 +281,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Acept;
-    private javax.swing.JCheckBox CH;
-    private javax.swing.JCheckBox EN;
-    private javax.swing.JCheckBox ES;
-    private javax.swing.JCheckBox FR;
-    private javax.swing.JCheckBox GER;
-    private javax.swing.JCheckBox PR;
-    private javax.swing.JFrame datospersona;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel panel;
     // End of variables declaration//GEN-END:variables
 }

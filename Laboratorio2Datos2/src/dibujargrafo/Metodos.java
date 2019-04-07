@@ -26,7 +26,7 @@ public class Metodos {
         y = y - (icono.getHeight()/2);
         Graphics g = panel.getGraphics();
         g.drawImage(icono, x, y, icono.getWidth(), icono.getHeight(),panel);
-        g.setColor(Color.red);
+        g.setColor(Color.black);
         g.drawString(nomper, x, y);
         g.dispose();
         
