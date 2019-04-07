@@ -5,14 +5,12 @@
  */
 package dibujargrafo;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -44,12 +42,9 @@ public class Principal extends javax.swing.JFrame {
         "Primo(a)", "Sobrino(a)", "Abuelo(a)", "Tío(a)"};
     boolean entrar = true;
 
-    /*
-    boolean tieneidiomas() {
-        return ES.isSelected() || EN.isSelected() || FR.isSelected() || CH.isSelected()
-                || GER.isSelected() || PR.isSelected();
-    }
-    
+    /* Subrutina utilizada para mostrar el jOptionPane que contiene los
+        checkbox de los idiomas, y guarda el nombre de la persona en los
+        ArrayList de los idiomas seleccionados
      */
     void mostraridiomas(String name) {
         JCheckBox ES = new JCheckBox("Español");
@@ -65,18 +60,24 @@ public class Principal extends javax.swing.JFrame {
         do {
             if (ES.isSelected() || EN.isSelected() || FR.isSelected() || CH.isSelected()
                     || GER.isSelected() || PR.isSelected()) {
-                if (ES.isSelected()) 
+                if (ES.isSelected()) {
                     esp.add(name);
-                if (EN.isSelected()) 
+                }
+                if (EN.isSelected()) {
                     eng.add(name);
-                if (FR.isSelected()) 
+                }
+                if (FR.isSelected()) {
                     fr.add(name);
-                if (CH.isSelected()) 
+                }
+                if (CH.isSelected()) {
                     chn.add(name);
-                if (GER.isSelected()) 
+                }
+                if (GER.isSelected()) {
                     ger.add(name);
-                if (PR.isSelected()) 
+                }
+                if (PR.isSelected()) {
                     port.add(name);
+                }
                 entra = false;
             } else {
                 JOptionPane.showMessageDialog(null, "Debe ingresar al menos un idioma");
@@ -84,7 +85,58 @@ public class Principal extends javax.swing.JFrame {
                 entra = true;
             }
         } while (entra);
-        System.out.println(" "+esp);
+    }
+
+    
+    void comparar(ArrayList<String> a) {
+        for (Nodo nodo : lista) {
+            if (nodo.isIsman()) {
+                Metodos.dibujarIcono(hombreSeleccionado, nodo.getX(), nodo.getY(), panel);
+            } else {
+                Metodos.dibujarIcono(mujerSeleccionado, nodo.getX(), nodo.getY(), panel);
+            }
+            for (int i = 0; i < a.size(); i++) {
+                String nombre = a.get(i);
+                if (nodo.getNombre().equals(nombre)) {
+                    if (nodo.isIsman()) {
+                        Metodos.dibujarIcono(hombreSeleccionado, nodo.getX(), nodo.getY(), panel);
+                    } else {
+                        Metodos.dibujarIcono(mujerSeleccionado, nodo.getX(), nodo.getY(), panel);
+                    }
+                }
+            }
+        }
+    }
+
+    void BuscarIdioma() {
+        String idioma = CBIdiom.getSelectedItem().toString();
+        for (Nodo nodo : lista) {
+            switch (idioma) {
+                case "Español":
+                    comparar(esp);
+                    break;
+
+                case "Inglés":
+                    comparar(eng);
+                    break;
+
+                case "Alemán":
+                    comparar(ger);
+                    break;
+
+                case "Francés":
+                    comparar(fr);
+                    break;
+
+                case "Portugués":
+                    comparar(port);
+                    break;
+
+                case "Mandarín":
+                    comparar(chn);
+                    break;
+            }
+        }
     }
 
     public Principal() throws IOException {
@@ -101,8 +153,21 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Opciones = new javax.swing.ButtonGroup();
         panel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        AllFam = new javax.swing.JRadioButton();
+        jLabel2 = new javax.swing.JLabel();
+        AllAmi = new javax.swing.JRadioButton();
+        AllNoR = new javax.swing.JRadioButton();
+        NewFriends = new javax.swing.JRadioButton();
+        jLabel3 = new javax.swing.JLabel();
+        AllSex = new javax.swing.JRadioButton();
+        AllIdiom = new javax.swing.JRadioButton();
+        CBSex = new javax.swing.JComboBox<>();
+        CBIdiom = new javax.swing.JComboBox<>();
+        Mostrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBounds(new java.awt.Rectangle(0, 0, 1024, 768));
@@ -135,7 +200,98 @@ public class Principal extends javax.swing.JFrame {
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 589, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones"));
+
+        Opciones.add(AllFam);
+        AllFam.setText("Todos los familiares de la persona seleccionada");
+
+        jLabel2.setText("Para proceder con las siguientes opciones debe seleccionar a la persona dentro del mapa");
+
+        Opciones.add(AllAmi);
+        AllAmi.setText("Todos los amigos (No familares) de la persona seleccionada");
+
+        Opciones.add(AllNoR);
+        AllNoR.setText("Personas sin ninguna relación con la persona seleccionada");
+
+        Opciones.add(NewFriends);
+        NewFriends.setText("Sugerir amigos a la persona seleccionada");
+
+        jLabel3.setText("Para estas opciones no es necesario seleccionar a una persona, pero sí el sexo o el idioma");
+
+        Opciones.add(AllSex);
+        AllSex.setText("Todas las personas del sexo:");
+
+        Opciones.add(AllIdiom);
+        AllIdiom.setText("Todas las personas que hablan el idioma:");
+
+        CBSex.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino" }));
+
+        CBIdiom.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Español", "Inglés", "Francés", "Alemán", "Mandarín", "Portugués" }));
+
+        Mostrar.setText("Confirmar");
+        Mostrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MostrarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(AllIdiom)
+                                .addGap(18, 18, 18)
+                                .addComponent(CBIdiom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(AllSex)
+                                .addGap(18, 18, 18)
+                                .addComponent(CBSex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(NewFriends)
+                            .addComponent(AllNoR)
+                            .addComponent(AllAmi)
+                            .addComponent(jLabel2)
+                            .addComponent(AllFam)
+                            .addComponent(jLabel3)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(180, 180, 180)
+                        .addComponent(Mostrar)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(AllFam)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(AllAmi)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(AllNoR)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(NewFriends)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(AllSex)
+                    .addComponent(CBSex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(AllIdiom)
+                    .addComponent(CBIdiom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addComponent(Mostrar)
+                .addGap(22, 22, 22))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -144,14 +300,18 @@ public class Principal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, 541, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -243,6 +403,12 @@ public class Principal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_panelPropertyChange
 
+    private void MostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MostrarActionPerformed
+        if (AllIdiom.isSelected()) {
+            BuscarIdioma();
+        }
+    }//GEN-LAST:event_MostrarActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -281,7 +447,20 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton AllAmi;
+    private javax.swing.JRadioButton AllFam;
+    private javax.swing.JRadioButton AllIdiom;
+    private javax.swing.JRadioButton AllNoR;
+    private javax.swing.JRadioButton AllSex;
+    private javax.swing.JComboBox<String> CBIdiom;
+    private javax.swing.JComboBox<String> CBSex;
+    private javax.swing.JButton Mostrar;
+    private javax.swing.JRadioButton NewFriends;
+    private javax.swing.ButtonGroup Opciones;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel panel;
     // End of variables declaration//GEN-END:variables
 }
