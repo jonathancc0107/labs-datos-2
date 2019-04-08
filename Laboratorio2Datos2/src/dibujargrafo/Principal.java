@@ -33,6 +33,7 @@ public class Principal extends javax.swing.JFrame {
     ArrayList<String> chn = new ArrayList<>();
     ArrayList<String> familia;
     ArrayList<String> amigos;
+    ArrayList<String> relacionados;
     BufferedImage iconohombre = Metodos.cargarImagen("icon-man");
     BufferedImage iconomujer = Metodos.cargarImagen("icon-girl");
     BufferedImage hombreSeleccionado = Metodos.cargarImagen("man-selected");
@@ -194,18 +195,68 @@ public class Principal extends javax.swing.JFrame {
     void familiares() {
         String nodoI = seleccionado.getNombre();
         familia = new ArrayList<>();
-        for (Arista arista : aristas) {
-            if ((nodoI.equals(arista.getNodoI()) || nodoI.equals(arista.getNodoD()))
-                    && !arista.getRelation().equals("Amigo(a)")) {
-                if (nodoI.equals(arista.getNodoI())) {
-                    familia.add(arista.getNodoD());
-                } else 
-                    familia.add(arista.getNodoI());
+        if (!aristas.isEmpty()) {
+            for (Arista arista : aristas) {
+                if ((nodoI.equals(arista.getNodoI()) || nodoI.equals(arista.getNodoD()))
+                        && !arista.getRelation().equals("Amigo(a)")) {
+                    if (nodoI.equals(arista.getNodoI())) {
+                        familia.add(arista.getNodoD());
+                    } else {
+                        familia.add(arista.getNodoI());
+                    }
+                }
             }
+            if (!familia.isEmpty()) {
+                for (Nodo nodo : lista) {
+                    for (int i = 0; i < familia.size(); i++) {
+                        if (nodo.getNombre().equals(familia.get(i))) {
+                            dibujarresaltado(nodo);
+                        }
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "La persona seleccionada no tiene familiares");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe haber al menos una arista");
         }
-        for (Nodo nodo : lista) {
-            for (int i = 0; i < familia.size(); i++) {
-                if (nodo.getNombre().equals(familia.get(i))) {
+    }
+
+    void norelation() {
+        String nodoI = seleccionado.getNombre();
+        relacionados = new ArrayList<>();
+        if (!aristas.isEmpty()) {
+            for (Arista arista : aristas) {
+                if (nodoI.equals(arista.getNodoI()) || nodoI.equals(arista.getNodoD())) {
+                    if (nodoI.equals(arista.getNodoI())) {
+                        relacionados.add(arista.getNodoD());
+                    } else {
+                        relacionados.add(arista.getNodoI());
+                    }
+                }
+            }
+            if (relacionados.size() == lista.size() - 1) {
+                JOptionPane.showMessageDialog(null, "La persona seleccionada está relacionada"
+                        + "con todas las otras personas");
+            } else {
+                for (Nodo nodo : lista) {
+                    if (relacionados.isEmpty()) {
+                        if (!nodo.equals(seleccionado)) {
+                            dibujarresaltado(nodo);
+                        }
+                    } else {
+                        for (int i = 0; i < relacionados.size(); i++) {
+                            if (!nodo.getNombre().equals(relacionados.get(i))
+                                    && !nodoI.equals(nodo.getNombre())) {
+                                dibujarresaltado(nodo);
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            for (Nodo nodo : lista) {
+                if (!nodo.getNombre().equals(nodoI)) {
                     dibujarresaltado(nodo);
                 }
             }
@@ -215,21 +266,30 @@ public class Principal extends javax.swing.JFrame {
     void amigos() {
         String nodoI = seleccionado.getNombre();
         amigos = new ArrayList<>();
-        for (Arista arista : aristas) {
-            if ((nodoI.equals(arista.getNodoI()) || nodoI.equals(arista.getNodoD()))
-                    && arista.getRelation().equals("Amigo(a)")) {
-                if (nodoI.equals(arista.getNodoI())) {
-                    amigos.add(arista.getNodoD());
-                } else 
-                    amigos.add(arista.getNodoI());
-            }
-        }
-        for (Nodo nodo : lista) {
-            for (int i = 0; i < amigos.size(); i++) {
-                if (nodo.getNombre().equals(amigos.get(i))) {
-                    dibujarresaltado(nodo);
+        if (!aristas.isEmpty()) {
+            for (Arista arista : aristas) {
+                if ((nodoI.equals(arista.getNodoI()) || nodoI.equals(arista.getNodoD()))
+                        && arista.getRelation().equals("Amigo(a)")) {
+                    if (nodoI.equals(arista.getNodoI())) {
+                        amigos.add(arista.getNodoD());
+                    } else {
+                        amigos.add(arista.getNodoI());
+                    }
                 }
             }
+            if (!amigos.isEmpty()) {
+                for (Nodo nodo : lista) {
+                    for (int i = 0; i < amigos.size(); i++) {
+                        if (nodo.getNombre().equals(amigos.get(i))) {
+                            dibujarresaltado(nodo);
+                        }
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "La persona seleccionada no tiene amigos");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe haber al menos una arista");
         }
     }
 
@@ -483,7 +543,9 @@ public class Principal extends javax.swing.JFrame {
 
     private void MostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MostrarActionPerformed
         for (Nodo nodo : lista) {
-            dibujar(nodo);
+            if (!nodo.equals(seleccionado)) {
+                dibujar(nodo);
+            }
         }
         if (Opciones.getSelection() == null) {
             JOptionPane.showMessageDialog(null,
@@ -505,7 +567,7 @@ public class Principal extends javax.swing.JFrame {
                                     amigos();
                                 } else {
                                     if (AllNoR.isSelected()) {
-
+                                        norelation();
                                     } else {
                                         if (NewFriends.isSelected()) {
 
