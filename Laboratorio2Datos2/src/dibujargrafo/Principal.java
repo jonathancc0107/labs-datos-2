@@ -143,7 +143,6 @@ public class Principal extends javax.swing.JFrame {
     poder usar el método comparar con dicho idioma */
     void BuscarIdioma() {
         String idioma = CBIdiom.getSelectedItem().toString();
-        //for (Nodo nodo : lista) {
             switch (idioma) {
                 case "Español":
                     comparar(esp);
@@ -169,7 +168,6 @@ public class Principal extends javax.swing.JFrame {
                     comparar(chn);
                     break;
             }
-       // }
     }
 
     /* Método que resalta el icono de las personas con el sexo x seleccionado */
