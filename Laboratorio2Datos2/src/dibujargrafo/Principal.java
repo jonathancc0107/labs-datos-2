@@ -143,7 +143,7 @@ public class Principal extends javax.swing.JFrame {
     poder usar el método comparar con dicho idioma */
     void BuscarIdioma() {
         String idioma = CBIdiom.getSelectedItem().toString();
-        for (Nodo nodo : lista) {
+        //for (Nodo nodo : lista) {
             switch (idioma) {
                 case "Español":
                     comparar(esp);
@@ -169,7 +169,7 @@ public class Principal extends javax.swing.JFrame {
                     comparar(chn);
                     break;
             }
-        }
+       // }
     }
 
     /* Método que resalta el icono de las personas con el sexo x seleccionado */
@@ -244,20 +244,23 @@ public class Principal extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "La persona seleccionada está relacionada"
                         + "con todas las otras personas");
             } else {
-                for (Nodo nodo : lista) {
-                    if (relacionados.isEmpty()) {
+                if (relacionados.isEmpty()) {
+                    for (Nodo nodo : lista) {
                         if (!nodo.equals(seleccionado)) {
                             dibujarresaltado(nodo);
                         }
-                    } else {
+                    }
+                } else {
+                    for (Nodo nodo : lista) {
                         for (int i = 0; i < relacionados.size(); i++) {
                             if (!nodo.getNombre().equals(relacionados.get(i))
-                                    && !nodoI.equals(nodo.getNombre())) {
+                                    && !nodo.equals(seleccionado)) {
                                 dibujarresaltado(nodo);
                             }
                         }
                     }
                 }
+
             }
         } else {
             for (Nodo nodo : lista) {
@@ -298,7 +301,7 @@ public class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Debe haber al menos una arista");
         }
     }
-    
+
     /* Método que resalta todos los amigos recomedados para la 
     persona seleccionada basándose en los amigos de sus amigos */
     void amigosrecomendados() {
