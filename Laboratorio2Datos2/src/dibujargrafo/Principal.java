@@ -33,6 +33,7 @@ public class Principal extends javax.swing.JFrame {
     ArrayList<String> chn = new ArrayList<>();
     ArrayList<String> familia;
     ArrayList<String> amigos;
+    ArrayList<String> amigosdeamigos;
     ArrayList<String> relacionados;
     BufferedImage iconohombre = Metodos.cargarImagen("icon-man");
     BufferedImage iconomujer = Metodos.cargarImagen("icon-girl");
@@ -171,6 +172,7 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
+    /* Método que resalta el icono de las personas con el sexo x seleccionado */
     void resaltarsex(String s) {
         if (s.equals("Masculino")) {
             for (Nodo nodo : lista) {
@@ -192,6 +194,7 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
+    /* Método que resalta todos los familiares de la persona seleccionada */
     void familiares() {
         String nodoI = seleccionado.getNombre();
         familia = new ArrayList<>();
@@ -222,6 +225,8 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
+    /* Método que resalta todas las personas no relacionadas a la 
+    persona seleccionada */
     void norelation() {
         String nodoI = seleccionado.getNombre();
         relacionados = new ArrayList<>();
@@ -263,6 +268,7 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
+    /* Método que resalta todos los amigos de la persona seleccionada */
     void amigos() {
         String nodoI = seleccionado.getNombre();
         amigos = new ArrayList<>();
@@ -284,6 +290,62 @@ public class Principal extends javax.swing.JFrame {
                             dibujarresaltado(nodo);
                         }
                     }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "La persona seleccionada no tiene amigos");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe haber al menos una arista");
+        }
+    }
+    
+    /* Método que resalta todos los amigos recomedados para la 
+    persona seleccionada basándose en los amigos de sus amigos */
+    void amigosrecomendados() {
+        String nodoI = seleccionado.getNombre();
+        amigos = new ArrayList<>();
+        amigosdeamigos = new ArrayList<>();
+        if (!aristas.isEmpty()) {
+            for (Arista arista : aristas) {
+                if ((nodoI.equals(arista.getNodoI()) || nodoI.equals(arista.getNodoD()))
+                        && arista.getRelation().equals("Amigo(a)")) {
+                    if (nodoI.equals(arista.getNodoI())) {
+                        amigos.add(arista.getNodoD());
+                    } else {
+                        amigos.add(arista.getNodoI());
+                    }
+                }
+            }
+            if (!amigos.isEmpty()) {
+                for (Nodo nodo : lista) {
+                    String nombrenodo = nodo.getNombre();
+                    for (int i = 0; i < amigos.size(); i++) {
+                        if (nombrenodo.equals(amigos.get(i))) {
+                            for (Arista arista : aristas) {
+                                if ((nombrenodo.equals(arista.getNodoI())
+                                        || nombrenodo.equals(arista.getNodoD()))
+                                        && arista.getRelation().equals("Amigo(a)")) {
+                                    if (nodo.getNombre().equals(arista.getNodoI())) {
+                                        amigosdeamigos.add(arista.getNodoD());
+                                    } else {
+                                        amigosdeamigos.add(arista.getNodoI());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!amigosdeamigos.isEmpty()) {
+                    for (Nodo nodo : lista) {
+                        for (int i = 0; i < amigosdeamigos.size(); i++) {
+                            if (nodo.getNombre().equals(amigosdeamigos.get(i))
+                                    && !nodo.equals(seleccionado)) {
+                                dibujarresaltado(nodo);
+                            }
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "No hay amigos sugeridos");
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "La persona seleccionada no tiene amigos");
@@ -570,7 +632,7 @@ public class Principal extends javax.swing.JFrame {
                                         norelation();
                                     } else {
                                         if (NewFriends.isSelected()) {
-
+                                            amigosrecomendados();
                                         }
                                     }
                                 }
