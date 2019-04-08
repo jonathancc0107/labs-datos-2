@@ -31,14 +31,18 @@ public class Principal extends javax.swing.JFrame {
     ArrayList<String> port = new ArrayList<>();
     ArrayList<String> ger = new ArrayList<>();
     ArrayList<String> chn = new ArrayList<>();
+    ArrayList<String> familia;
+    ArrayList<String> amigos;
     BufferedImage iconohombre = Metodos.cargarImagen("icon-man");
     BufferedImage iconomujer = Metodos.cargarImagen("icon-girl");
     BufferedImage hombreSeleccionado = Metodos.cargarImagen("man-selected");
     BufferedImage mujerSeleccionado = Metodos.cargarImagen("girl-selected");
+    BufferedImage hombreresaltado = Metodos.cargarImagen("man-res");
+    BufferedImage mujerresaltada = Metodos.cargarImagen("girl-res");
     Nodo seleccionado = null;
     String sexo;
     public static final String[] sexos = {"Masculino", "Femenino"};
-    public static final String[] relaciones = {"Amigo", "Padre", "Madre", "Hermano(a)",
+    public static final String[] relaciones = {"Amigo(a)", "Padre", "Madre", "Hermano(a)",
         "Primo(a)", "Sobrino(a)", "Abuelo(a)", "Tío(a)"};
     boolean entrar = true;
 
@@ -105,17 +109,31 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
+    /* Método que dibuja el icono resaltado para diferenciar entre su color
+    normal y seleccionado*/
+    void dibujarresaltado(Nodo n) {
+        if (n.isIsman()) {
+            Metodos.dibujarIcono(hombreresaltado, n.getX(), n.getY(), panel);
+        } else {
+            Metodos.dibujarIcono(mujerresaltada, n.getX(), n.getY(), panel);
+        }
+    }
+
     /* Método utilizado para revisar el nombre de cada persona por nodo
     y comparar con los nombres registrados en el arraylist del idioma */
     void comparar(ArrayList<String> a) {
-        for (Nodo nodo : lista) {
-            dibujar(nodo);
-            for (int i = 0; i < a.size(); i++) {
-                String nombre = a.get(i);
-                if (nodo.getNombre().equals(nombre)) {
-                    dibujarselec(nodo);
+        if (!a.isEmpty()) {
+            for (Nodo nodo : lista) {
+                dibujar(nodo);
+                for (int i = 0; i < a.size(); i++) {
+                    String nombre = a.get(i);
+                    if (nodo.getNombre().equals(nombre)) {
+                        dibujarresaltado(nodo);
+                    }
                 }
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "Ninguna persona habla este idioma");
         }
     }
 
@@ -152,6 +170,68 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
+    void resaltarsex(String s) {
+        if (s.equals("Masculino")) {
+            for (Nodo nodo : lista) {
+                if (nodo.isIsman()) {
+                    dibujarresaltado(nodo);
+                } else {
+                    dibujar(nodo);
+                }
+            }
+        } else {
+            for (Nodo nodo : lista) {
+                dibujar(nodo);
+                if (!nodo.isIsman()) {
+                    dibujarresaltado(nodo);
+                } else {
+                    dibujar(nodo);
+                }
+            }
+        }
+    }
+
+    void familiares() {
+        String nodoI = seleccionado.getNombre();
+        familia = new ArrayList<>();
+        for (Arista arista : aristas) {
+            if ((nodoI.equals(arista.getNodoI()) || nodoI.equals(arista.getNodoD()))
+                    && !arista.getRelation().equals("Amigo(a)")) {
+                if (nodoI.equals(arista.getNodoI())) {
+                    familia.add(arista.getNodoD());
+                } else 
+                    familia.add(arista.getNodoI());
+            }
+        }
+        for (Nodo nodo : lista) {
+            for (int i = 0; i < familia.size(); i++) {
+                if (nodo.getNombre().equals(familia.get(i))) {
+                    dibujarresaltado(nodo);
+                }
+            }
+        }
+    }
+
+    void amigos() {
+        String nodoI = seleccionado.getNombre();
+        amigos = new ArrayList<>();
+        for (Arista arista : aristas) {
+            if ((nodoI.equals(arista.getNodoI()) || nodoI.equals(arista.getNodoD()))
+                    && arista.getRelation().equals("Amigo(a)")) {
+                if (nodoI.equals(arista.getNodoI())) {
+                    amigos.add(arista.getNodoD());
+                } else 
+                    amigos.add(arista.getNodoI());
+            }
+        }
+        for (Nodo nodo : lista) {
+            for (int i = 0; i < amigos.size(); i++) {
+                if (nodo.getNombre().equals(amigos.get(i))) {
+                    dibujarresaltado(nodo);
+                }
+            }
+        }
+    }
 
     public Principal() throws IOException {
         initComponents();
@@ -182,7 +262,6 @@ public class Principal extends javax.swing.JFrame {
         CBSex = new javax.swing.JComboBox<>();
         CBIdiom = new javax.swing.JComboBox<>();
         Mostrar = new javax.swing.JButton();
-        Reset = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBounds(new java.awt.Rectangle(0, 0, 1024, 768));
@@ -253,13 +332,6 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        Reset.setText("Reiniciar");
-        Reset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ResetActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -268,26 +340,22 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(AllIdiom)
-                                .addGap(18, 18, 18)
-                                .addComponent(CBIdiom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(AllSex)
-                                .addGap(18, 18, 18)
-                                .addComponent(CBSex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(NewFriends)
-                            .addComponent(AllNoR)
-                            .addComponent(AllAmi)
-                            .addComponent(jLabel2)
-                            .addComponent(AllFam)
-                            .addComponent(jLabel3))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(AllIdiom)
+                        .addGap(18, 18, 18)
+                        .addComponent(CBIdiom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(AllSex)
+                        .addGap(18, 18, 18)
+                        .addComponent(CBSex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(NewFriends)
+                    .addComponent(AllNoR)
+                    .addComponent(AllAmi)
+                    .addComponent(jLabel2)
+                    .addComponent(AllFam)
+                    .addComponent(jLabel3)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(Mostrar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Reset)))
+                        .addGap(155, 155, 155)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -305,23 +373,17 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(NewFriends)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(AllSex)
-                            .addComponent(CBSex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(AllIdiom)
-                            .addComponent(CBIdiom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(22, 84, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(Reset)
-                            .addComponent(Mostrar))
-                        .addContainerGap())))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(AllSex)
+                    .addComponent(CBSex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(AllIdiom)
+                    .addComponent(CBIdiom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addComponent(Mostrar)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -393,17 +455,18 @@ public class Principal extends javax.swing.JFrame {
         } else {
             Nodo destino = Metodos.seleccionar(x, y, d, lista);
             if (destino != null && !destino.equals(seleccionado)) {
-                String relacion = (String) JOptionPane.showInputDialog(frame,
+
+                Metodos.dibujarLinea(seleccionado.getX(), seleccionado.getY(),
+                        destino.getX(), destino.getY(), panel);
+                dibujar(destino);
+                String relation = (String) JOptionPane.showInputDialog(frame,
                         "¿Qué relación tiene con la persona " + destino.getNombre(),
                         "Relaciones",
                         JOptionPane.QUESTION_MESSAGE,
                         null,
                         relaciones,
                         relaciones[0]);
-                Metodos.dibujarLinea(seleccionado.getX(), seleccionado.getY(),
-                        destino.getX(), destino.getY(), panel);
-                dibujar(destino);
-                aristas.add(new Arista(seleccionado.getNombre(), destino.getNombre(), relacion));
+                aristas.add(new Arista(seleccionado.getNombre(), destino.getNombre(), relation));
             }
             dibujar(seleccionado);
             seleccionado = null;
@@ -419,43 +482,51 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_panelPropertyChange
 
     private void MostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MostrarActionPerformed
-        if (!lista.isEmpty()) {
-            if (AllIdiom.isSelected()) {
-                BuscarIdioma();
-            } else {
-                if (AllSex.isSelected()) {
-                    String s = CBSex.getSelectedItem().toString();
-                    if (s.equals("Masculino")) {
-                        for (Nodo nodo : lista) {
-                            if (nodo.isIsman()) {
-                                dibujarselec(nodo);
-                            } else {
-                                dibujar(nodo);
-                            }
-                        }
-                    } else {
-                        for (Nodo nodo : lista) {
-                            dibujar(nodo);
-                            if (!nodo.isIsman()) {
-                                dibujarselec(nodo);
-                            } else {
-                                dibujar(nodo);
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Debe haber por lo menos una persona"
-                    + "en la lista para usar alguna opción");
-        }
-    }//GEN-LAST:event_MostrarActionPerformed
-
-    private void ResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetActionPerformed
         for (Nodo nodo : lista) {
             dibujar(nodo);
         }
-    }//GEN-LAST:event_ResetActionPerformed
+        if (Opciones.getSelection() == null) {
+            JOptionPane.showMessageDialog(null,
+                    "Debe elegir alguna opción");
+        } else {
+            if (!lista.isEmpty()) {
+                if (AllIdiom.isSelected()) {
+                    BuscarIdioma();
+                } else {
+                    if (AllSex.isSelected()) {
+                        String s = CBSex.getSelectedItem().toString();
+                        resaltarsex(s);
+                    } else {
+                        if (seleccionado != null) {
+                            if (AllFam.isSelected()) {
+                                familiares();
+                            } else {
+                                if (AllAmi.isSelected()) {
+                                    amigos();
+                                } else {
+                                    if (AllNoR.isSelected()) {
+
+                                    } else {
+                                        if (NewFriends.isSelected()) {
+
+                                        }
+                                    }
+                                }
+                            }
+                            seleccionado = null;
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Debe seleccionar a alguna persona");
+                        }
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Debe haber por lo menos una persona"
+                        + "en la lista para usar alguna opción");
+            }
+
+        }
+
+    }//GEN-LAST:event_MostrarActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -505,7 +576,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton Mostrar;
     private javax.swing.JRadioButton NewFriends;
     private javax.swing.ButtonGroup Opciones;
-    private javax.swing.JButton Reset;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
