@@ -18,6 +18,11 @@ public class Nodo {
         this.isman = isman;
     }
 
+    public Nodo(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    
     public String getNombre() {
         return nombre;
     }
